@@ -10,32 +10,46 @@ $cars = $stmt->fetchAll();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?php echo SITE_NAME; ?> - Location de voitures</title>
+    <title><?php echo SITE_NAME; ?> - Location de voitures premium</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     
     <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
     <!-- Bootstrap Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    
     <!-- Custom CSS -->
     <link href="css/style.css" rel="stylesheet">
 </head>
 <body>
     <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
+    <nav class="navbar" id="navbar">
         <div class="container">
-            <a class="navbar-brand fw-bold" href="index.php">
-                <i class="bi bi-car-front"></i> <?php echo SITE_NAME; ?>
+            <a class="navbar-brand" href="index.php">
+                <i class="bi bi-car-front"></i>
+                <?php echo SITE_NAME; ?>
             </a>
+            
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
+            
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
                         <a class="nav-link active" href="index.php">Accueil</a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link" href="#vehicles">Véhicules</a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link" href="reservation.php">Réserver</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#contact">Contact</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="admin/">Admin</a>
@@ -45,88 +59,130 @@ $cars = $stmt->fetchAll();
         </div>
     </nav>
 
-    <!-- Hero Section avec moteur de recherche -->
+    <!-- Hero Section -->
     <section class="hero-section">
-        <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-lg-8 text-center">
-                    <h1 class="display-4 fw-bold text-white mb-4">
-                        Trouvez votre voiture de location idéale
-                    </h1>
-                    <p class="lead text-white mb-5">
-                        Large gamme de véhicules à des prix compétitifs pour tous vos déplacements
-                    </p>
-                    
-                    <!-- Formulaire de recherche -->
-                    <div class="search-form bg-white p-4 rounded-3 shadow">
-                        <form action="recherche.php" method="GET" class="row g-3">
-                            <div class="col-md-3">
-                                <label for="ville" class="form-label">Ville</label>
-                                <input type="text" class="form-control" id="ville" name="ville" placeholder="Votre ville" required>
+        <!-- Vidéo d'arrière-plan -->
+        <video class="hero-video" autoplay muted loop playsinline>
+            <source src="videos/car-driving.mp4" type="video/mp4">
+            <source src="videos/car-driving.webm" type="video/webm">
+        </video>
+        
+        <!-- Overlay -->
+        <div class="hero-overlay"></div>
+        
+        <!-- Contenu principal -->
+        <div class="hero-content">
+            <h1 class="hero-title">
+                Location de Voitures Premium
+            </h1>
+            
+            <p class="hero-subtitle">
+                Découvrez notre collection exclusive de véhicules haut de gamme pour tous vos déplacements professionnels et personnels
+            </p>
+            
+            <!-- Formulaire de recherche -->
+            <div class="search-form">
+                <form action="recherche.php" method="GET">
+                    <div class="row g-4">
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label for="ville" class="form-label">
+                                    <i class="bi bi-geo-alt"></i> Destination
+                                </label>
+                                <input type="text" class="form-control" id="ville" name="ville" 
+                                       placeholder="Où allez-vous ?" required>
                             </div>
-                            <div class="col-md-3">
-                                <label for="date_debut" class="form-label">Date début</label>
+                        </div>
+                        
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label for="date_debut" class="form-label">
+                                    <i class="bi bi-calendar-event"></i> Date début
+                                </label>
                                 <input type="date" class="form-control" id="date_debut" name="date_debut" required>
                             </div>
-                            <div class="col-md-3">
-                                <label for="date_fin" class="form-label">Date fin</label>
+                        </div>
+                        
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label for="date_fin" class="form-label">
+                                    <i class="bi bi-calendar-check"></i> Date fin
+                                </label>
                                 <input type="date" class="form-control" id="date_fin" name="date_fin" required>
                             </div>
-                            <div class="col-md-3">
-                                <label for="type_voiture" class="form-label">Type</label>
+                        </div>
+                        
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label for="type_voiture" class="form-label">
+                                    <i class="bi bi-car-front"></i> Type
+                                </label>
                                 <select class="form-select" id="type_voiture" name="type_voiture">
                                     <option value="">Tous types</option>
                                     <option value="berline">Berline</option>
                                     <option value="suv">SUV</option>
-                                    <option value="compacte">Compacte</option>
                                     <option value="luxe">Luxe</option>
+                                    <option value="sport">Sport</option>
                                 </select>
                             </div>
-                            <div class="col-12">
-                                <button type="submit" class="btn btn-primary btn-lg px-5">
-                                    <i class="bi bi-search"></i> Rechercher
-                                </button>
-                            </div>
-                        </form>
+                        </div>
                     </div>
-                </div>
+                    
+                    <div class="text-center mt-4">
+                        <button type="submit" class="btn btn-search">
+                            <i class="bi bi-search"></i> Trouver ma voiture
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
     </section>
 
     <!-- Section des voitures -->
-    <section class="py-5">
+    <section class="section cars-section" id="vehicles">
         <div class="container">
-            <div class="row mb-5">
-                <div class="col-12 text-center">
-                    <h2 class="display-6 fw-bold">Nos véhicules disponibles</h2>
-                    <p class="lead text-muted">Choisissez parmi notre sélection de voitures de qualité</p>
-                </div>
+            <div class="section-header">
+                <h2 class="section-title">Notre Collection Premium</h2>
+                <p class="section-subtitle">
+                    Des véhicules d'exception sélectionnés pour leur confort, leur sécurité et leur performance
+                </p>
             </div>
             
             <div class="row g-4">
-                <?php foreach ($cars as $car): ?>
+                <?php foreach ($cars as $index => $car): ?>
                 <div class="col-lg-4 col-md-6">
-                    <div class="card h-100 shadow-sm border-0">
-                        <div class="card-img-top-container">
+                    <div class="car-card">
+                        <div class="car-image-container">
                             <img src="images/<?php echo htmlspecialchars($car['image']); ?>" 
-                                 class="card-img-top" 
+                                 class="car-image" 
                                  alt="<?php echo htmlspecialchars($car['titre']); ?>"
                                  onerror="this.src='images/default-car.jpg'">
-                        </div>
-                        <div class="card-body d-flex flex-column">
-                            <h5 class="card-title fw-bold"><?php echo htmlspecialchars($car['titre']); ?></h5>
-                            <p class="card-text text-muted"><?php echo htmlspecialchars($car['description']); ?></p>
-                            <div class="mt-auto">
-                                <div class="d-flex justify-content-between align-items-center mb-3">
-                                    <span class="h4 text-primary mb-0"><?php echo number_format($car['prix_jour'], 2); ?> €</span>
-                                    <small class="text-muted">/jour</small>
-                                </div>
-                                <a href="reservation.php?car_id=<?php echo $car['id']; ?>" 
-                                   class="btn btn-primary w-100">
-                                    <i class="bi bi-calendar-check"></i> Réserver maintenant
-                                </a>
+                            
+                            <div class="price-badge">
+                                <?php echo number_format($car['prix_jour'], 0); ?> €/jour
                             </div>
+                        </div>
+                        
+                        <div class="car-content">
+                            <h5 class="car-title"><?php echo htmlspecialchars($car['titre']); ?></h5>
+                            <p class="car-description"><?php echo htmlspecialchars($car['description']); ?></p>
+                            
+                            <div class="car-features">
+                                <span class="feature-tag">
+                                    <i class="bi bi-speedometer2"></i> Performant
+                                </span>
+                                <span class="feature-tag">
+                                    <i class="bi bi-shield-check"></i> Sécurisé
+                                </span>
+                                <span class="feature-tag">
+                                    <i class="bi bi-star"></i> Premium
+                                </span>
+                            </div>
+                            
+                            <a href="reservation.php?car_id=<?php echo $car['id']; ?>" 
+                               class="btn btn-reserve">
+                                <i class="bi bi-calendar-check"></i> Réserver maintenant
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -135,79 +191,165 @@ $cars = $stmt->fetchAll();
         </div>
     </section>
 
-    <!-- Section avantages -->
-    <section class="bg-light py-5">
+    <!-- Section des avantages -->
+    <section class="section features-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Pourquoi nous choisir ?</h2>
+                <p class="section-subtitle">
+                    Une expérience de location exceptionnelle avec des services premium
+                </p>
+            </div>
+            
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="bi bi-shield-check"></i>
+                        </div>
+                        <h4 class="feature-title">Assurance Premium</h4>
+                        <p class="feature-description">
+                            Toutes nos locations incluent une assurance complète et des garanties étendues 
+                            pour votre tranquillité d'esprit.
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="col-md-4">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="bi bi-clock"></i>
+                        </div>
+                        <h4 class="feature-title">Service 24/7</h4>
+                        <p class="feature-description">
+                            Notre équipe d'experts est disponible 24h/24 et 7j/7 pour vous assister 
+                            et répondre à tous vos besoins.
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="col-md-4">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="bi bi-star"></i>
+                        </div>
+                        <h4 class="feature-title">Qualité Exceptionnelle</h4>
+                        <p class="feature-description">
+                            Tous nos véhicules sont rigoureusement entretenus et contrôlés 
+                            pour garantir une expérience de conduite parfaite.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section statistiques -->
+    <section class="section stats-section">
         <div class="container">
             <div class="row g-4">
-                <div class="col-md-4 text-center">
-                    <div class="feature-icon bg-primary bg-gradient text-white rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center">
-                        <i class="bi bi-shield-check fs-1"></i>
+                <div class="col-md-3">
+                    <div class="stat-card">
+                        <div class="stat-number">500+</div>
+                        <div class="stat-label">Clients satisfaits</div>
                     </div>
-                    <h4>Assurance incluse</h4>
-                    <p class="text-muted">Toutes nos locations incluent une assurance complète pour votre tranquillité d'esprit.</p>
                 </div>
-                <div class="col-md-4 text-center">
-                    <div class="feature-icon bg-primary bg-gradient text-white rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center">
-                        <i class="bi bi-clock fs-1"></i>
+                
+                <div class="col-md-3">
+                    <div class="stat-card">
+                        <div class="stat-number">50+</div>
+                        <div class="stat-label">Véhicules disponibles</div>
                     </div>
-                    <h4>Service 24/7</h4>
-                    <p class="text-muted">Notre équipe est disponible 24h/24 et 7j/7 pour vous assister.</p>
                 </div>
-                <div class="col-md-4 text-center">
-                    <div class="feature-icon bg-primary bg-gradient text-white rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center">
-                        <i class="bi bi-star fs-1"></i>
+                
+                <div class="col-md-3">
+                    <div class="stat-card">
+                        <div class="stat-number">99%</div>
+                        <div class="stat-label">Taux de satisfaction</div>
                     </div>
-                    <h4>Qualité garantie</h4>
-                    <p class="text-muted">Tous nos véhicules sont régulièrement entretenus et contrôlés.</p>
+                </div>
+                
+                <div class="col-md-3">
+                    <div class="stat-card">
+                        <div class="stat-number">24h</div>
+                        <div class="stat-label">Support disponible</div>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- Footer -->
-    <footer class="bg-dark text-white py-5">
+    <footer class="footer" id="contact">
         <div class="container">
             <div class="row g-4">
                 <div class="col-lg-4">
-                    <h5 class="mb-3"><?php echo SITE_NAME; ?></h5>
-                    <p class="text-muted">Votre partenaire de confiance pour la location de véhicules. Qualité, sécurité et service client au rendez-vous.</p>
+                    <h5><?php echo SITE_NAME; ?></h5>
+                    <p>
+                        Votre partenaire de confiance pour la location de véhicules premium. 
+                        Qualité, sécurité et service client au rendez-vous.
+                    </p>
+                    
+                    <div class="social-links">
+                        <a href="#" class="social-link"><i class="bi bi-facebook"></i></a>
+                        <a href="#" class="social-link"><i class="bi bi-twitter"></i></a>
+                        <a href="#" class="social-link"><i class="bi bi-instagram"></i></a>
+                        <a href="#" class="social-link"><i class="bi bi-linkedin"></i></a>
+                    </div>
                 </div>
+                
                 <div class="col-lg-4">
-                    <h5 class="mb-3">Contact</h5>
-                    <ul class="list-unstyled text-muted">
-                        <li><i class="bi bi-geo-alt"></i> 123 Rue de la Location, 75001 Paris</li>
+                    <h5>Contact</h5>
+                    <ul class="list-unstyled">
+                        <li><i class="bi bi-geo-alt"></i> 123 Avenue des Champs-Élysées, 75008 Paris</li>
                         <li><i class="bi bi-telephone"></i> +33 1 23 45 67 89</li>
                         <li><i class="bi bi-envelope"></i> contact@location-voitures.fr</li>
+                        <li><i class="bi bi-clock"></i> 24h/24 - 7j/7</li>
                     </ul>
                 </div>
+                
                 <div class="col-lg-4">
-                    <h5 class="mb-3">Horaires</h5>
-                    <ul class="list-unstyled text-muted">
-                        <li>Lundi - Vendredi : 8h - 20h</li>
-                        <li>Samedi : 9h - 18h</li>
-                        <li>Dimanche : 10h - 16h</li>
+                    <h5>Services</h5>
+                    <ul class="list-unstyled">
+                        <li><i class="bi bi-check-circle"></i> Location courte durée</li>
+                        <li><i class="bi bi-check-circle"></i> Location longue durée</li>
+                        <li><i class="bi bi-check-circle"></i> Service avec chauffeur</li>
+                        <li><i class="bi bi-check-circle"></i> Livraison à domicile</li>
                     </ul>
                 </div>
             </div>
-            <hr class="my-4">
+            
+            <hr class="my-4" style="border-color: var(--secondary);">
+            
             <div class="row">
                 <div class="col-md-6">
-                    <p class="text-muted mb-0">&copy; <?php echo date('Y'); ?> <?php echo SITE_NAME; ?>. Tous droits réservés.</p>
+                    <p class="mb-0">&copy; <?php echo date('Y'); ?> <?php echo SITE_NAME; ?>. Tous droits réservés.</p>
                 </div>
                 <div class="col-md-6 text-md-end">
-                    <a href="#" class="text-muted text-decoration-none me-3">Mentions légales</a>
-                    <a href="#" class="text-muted text-decoration-none me-3">CGV</a>
-                    <a href="#" class="text-muted text-decoration-none">Politique de confidentialité</a>
+                    <a href="#" class="me-3">Mentions légales</a>
+                    <a href="#" class="me-3">CGV</a>
+                    <a href="#">Politique de confidentialité</a>
                 </div>
             </div>
         </div>
     </footer>
 
+    <!-- Scripts -->
     <!-- Bootstrap 5 JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     
     <!-- Custom JS -->
     <script>
+        // Navigation scroll effect
+        window.addEventListener('scroll', function() {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
         // Validation des dates
         document.addEventListener('DOMContentLoaded', function() {
             const dateDebut = document.getElementById('date_debut');
@@ -225,6 +367,59 @@ $cars = $stmt->fetchAll();
                     dateFin.value = '';
                 }
             });
+        });
+
+        // Mobile menu toggle
+        const navbarToggler = document.querySelector('.navbar-toggler');
+        const navbarNav = document.querySelector('.navbar-nav');
+        
+        navbarToggler.addEventListener('click', function() {
+            navbarNav.classList.toggle('show');
+        });
+
+        // Smooth scroll pour les liens d'ancrage
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Animation des cartes au scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Observer les cartes de voitures
+        document.querySelectorAll('.car-card').forEach(card => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(30px)';
+            card.style.transition = 'all 0.6s ease';
+            observer.observe(card);
+        });
+
+        // Observer les cartes de fonctionnalités
+        document.querySelectorAll('.feature-card').forEach(card => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(30px)';
+            card.style.transition = 'all 0.6s ease';
+            observer.observe(card);
         });
     </script>
 </body>
