@@ -1,0 +1,106 @@
+# Fichier .htaccess pour le site de location de voitures
+
+# Protection contre l'affichage du contenu des dossiers
+Options -Indexes
+
+# Protection des fichiers sensibles
+<Files "config.php">
+    Order Allow,Deny
+    Deny from all
+</Files>
+
+<Files "*.sql">
+    Order Allow,Deny
+    Deny from all
+</Files>
+
+# Protection du dossier admin
+<Directory "admin">
+    # Autoriser l'accès aux fichiers PHP uniquement
+    <FilesMatch "\.(php)$">
+        Order Allow,Deny
+        Allow from all
+    </FilesMatch>
+    
+    # Bloquer l'accès aux autres types de fichiers
+    <FilesMatch "\.(txt|log|ini|conf)$">
+        Order Allow,Deny
+        Deny from all
+    </FilesMatch>
+</Directory>
+
+# Sécurité des uploads
+<Directory "uploads">
+    # Bloquer l'exécution de fichiers PHP
+    <FilesMatch "\.(php|php3|php4|php5|phtml|pl|py|jsp|asp|sh|cgi)$">
+        Order Allow,Deny
+        Deny from all
+    </FilesMatch>
+    
+    # Autoriser uniquement les images
+    <FilesMatch "\.(jpg|jpeg|png|gif|bmp|webp)$">
+        Order Allow,Deny
+        Allow from all
+    </FilesMatch>
+</Directory>
+
+# Compression GZIP
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/plain
+    AddOutputFilterByType DEFLATE text/html
+    AddOutputFilterByType DEFLATE text/xml
+    AddOutputFilterByType DEFLATE text/css
+    AddOutputFilterByType DEFLATE application/xml
+    AddOutputFilterByType DEFLATE application/xhtml+xml
+    AddOutputFilterByType DEFLATE application/rss+xml
+    AddOutputFilterByType DEFLATE application/javascript
+    AddOutputFilterByType DEFLATE application/x-javascript
+</IfModule>
+
+# Cache des navigateurs
+<IfModule mod_expires.c>
+    ExpiresActive On
+    ExpiresByType image/jpg "access plus 1 month"
+    ExpiresByType image/jpeg "access plus 1 month"
+    ExpiresByType image/gif "access plus 1 month"
+    ExpiresByType image/png "access plus 1 month"
+    ExpiresByType text/css "access plus 1 month"
+    ExpiresByType application/javascript "access plus 1 month"
+</IfModule>
+
+# Headers de sécurité
+<IfModule mod_headers.c>
+    Header always set X-Content-Type-Options nosniff
+    Header always set X-Frame-Options DENY
+    Header always set X-XSS-Protection "1; mode=block"
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>
+
+# Redirection des erreurs
+ErrorDocument 404 /index.php
+ErrorDocument 403 /index.php
+ErrorDocument 500 /index.php
+
+# Protection contre les attaques courantes
+RewriteEngine On
+
+# Bloquer les tentatives d'accès aux fichiers système
+RewriteCond %{REQUEST_URI} (\.htaccess|\.htpasswd|\.git|\.env|composer\.json|package\.json) [NC]
+RewriteRule .* - [F,L]
+
+# Bloquer les tentatives d'injection SQL
+RewriteCond %{QUERY_STRING} (\<|%3C).*script.*(\>|%3E) [NC,OR]
+RewriteCond %{QUERY_STRING} GLOBALS(=|\[|\%[0-9A-Z]{0,2}) [OR]
+RewriteCond %{QUERY_STRING} _REQUEST(=|\[|\%[0-9A-Z]{0,2}) [OR]
+RewriteCond %{QUERY_STRING} proc/self/environ [OR]
+RewriteCond %{QUERY_STRING} mosConfig [OR]
+RewriteCond %{QUERY_STRING} base64_(en|de)code [OR]
+RewriteCond %{QUERY_STRING} (<|%3C)([^s]*s)+cript.*(>|%3E) [NC,OR]
+RewriteCond %{QUERY_STRING} (\<|%3C).*iframe.*(\>|%3E) [NC]
+RewriteRule .* - [F,L]
+
+# Limiter la taille des uploads (si mod_php est utilisé)
+php_value upload_max_filesize 5M
+php_value post_max_size 6M
+php_value max_execution_time 30
+php_value memory_limit 128M
